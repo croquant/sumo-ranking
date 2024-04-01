@@ -10,6 +10,7 @@ from .constants import (
     DIVISION_NAMES_SHORT,
     RANK_NAMES,
     RANK_NAMES_SHORT,
+    RANKING_LEVELS,
 )
 
 
@@ -43,6 +44,7 @@ class Rank(models.Model):
         editable=False,
     )
     title = models.CharField(max_length=12, choices=RANK_NAMES, editable=False)
+    level = models.PositiveSmallIntegerField(editable=False)
     order = models.PositiveSmallIntegerField(
         blank=True, default=0, editable=False
     )
@@ -77,10 +79,14 @@ class Rank(models.Model):
             self.division = Division.objects.get(name=self.title)
         else:
             self.division = Division.objects.get(name="Makuuchi")
+        self.level = RANKING_LEVELS[self.title]
         super(Rank, self).save(*args, **kwargs)
 
     def __str__(self):
         return self.name()
+
+    class Meta:
+        ordering = ["level", "order", "direction"]
 
 
 class Heya(models.Model):
@@ -162,3 +168,7 @@ class Rikishi(models.Model):
 
     def __str__(self):
         return self.name
+
+    class Meta:
+        ordering = ["name"]
+        verbose_name_plural = "Rikishi"

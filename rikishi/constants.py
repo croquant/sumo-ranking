@@ -56,6 +56,20 @@ RANK_NAMES_SHORT = {
     "Banzuke-gai": "Bg",
 }
 
+RANKING_LEVELS = {
+    "Yokozuna": 1,
+    "Ozeki": 2,
+    "Sekiwake": 3,
+    "Komusubi": 4,
+    "Maegashira": 5,
+    "Juryo": 6,
+    "Makushita": 7,
+    "Sandanme": 8,
+    "Jonidan": 9,
+    "Jonokuchi": 10,
+    "Banzuke-gai": 11,
+}
+
 DIRECTION_NAMES = [("East", "East"), ("West", "West")]
 
 DIRECTION_NAMES_SHORT = {"East": "E", "West": "W"}

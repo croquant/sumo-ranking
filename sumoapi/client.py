@@ -17,6 +17,14 @@ class SumoApiClient:
         response = requests.get(f"{BASE_URL}{endpoint}")
         return json.loads(response.text)
 
+    def get_basho(self, year, month):
+        endpoint = f"/basho/{year}{month:02d}"
+        response = json.loads(requests.get(f"{BASE_URL}{endpoint}").text)
+        if "date" in response and response["date"] != "":
+            return response
+        else:
+            return None
+
     def get_bouts(self, year, month, day, division="Makuuchi"):
         endpoint = f"/basho/{year}{month:02d}/torikumi/{division}/{day}"
         print(f"{BASE_URL}{endpoint}")

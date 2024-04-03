@@ -12,10 +12,14 @@ sumoapi = SumoApiClient()
 
 def save_bouts(bouts, basho):
     for bout in bouts:
+        print(bout)
         division = Division.objects.get(name=bout["division"])
         east = Rikishi.objects.get(api_id=bout["eastId"])
         west = Rikishi.objects.get(api_id=bout["westId"])
-        winner = Rikishi.objects.get(api_id=bout["winnerId"])
+        try:
+            winner = Rikishi.objects.get(api_id=bout["winnerId"])
+        except Exception:
+            continue
         Torikumi.objects.get_or_create(
             basho=basho,
             division=division,

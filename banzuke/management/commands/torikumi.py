@@ -12,7 +12,6 @@ sumoapi = SumoApiClient()
 
 def save_bouts(bouts, basho):
     for bout in bouts:
-        print(bout)
         division = Division.objects.get(name=bout["division"])
         east = Rikishi.objects.get(api_id=bout["eastId"])
         west = Rikishi.objects.get(api_id=bout["westId"])
@@ -71,7 +70,7 @@ class Command(BaseCommand):
                         start_date=start_date,
                         end_date=end_date,
                     )[0]
-                    print(basho)
+
                     for day in range(1, 17):
                         for div in DIVISIONS:
                             bouts = sumoapi.get_bouts(year, month, day, div)

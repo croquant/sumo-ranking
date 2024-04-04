@@ -31,12 +31,14 @@ class Torikumi(models.Model):
         on_delete=models.CASCADE,
         related_name="torikumi",
         editable=False,
+        db_index=True,
     )
     division = models.ForeignKey(
         Division,
         on_delete=models.CASCADE,
         related_name="torikumi",
         editable=False,
+        db_index=True,
     )
     day = models.PositiveSmallIntegerField(editable=False)
     east = models.ForeignKey(

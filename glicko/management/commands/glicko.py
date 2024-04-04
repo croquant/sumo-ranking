@@ -97,6 +97,7 @@ class Command(BaseCommand):
                 Q(intai__isnull=True) | Q(intai__gte=basho_date)
             ).filter(debut__lte=basho_date)
             print(f"Active: {len(active_rikishi)}")
+
             glickos_to_update = []
             for rikishi in active_rikishi:
                 glicko = rikishi.glicko

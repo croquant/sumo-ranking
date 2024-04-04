@@ -1,0 +1,66 @@
+<article>
+  <header class="pico-background-pink-600">Glicko Rating</header>
+  <table>
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Name</th>
+        <th>Rank</th>
+        <th>Rating</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for rikishi in object_list %}
+      <tr>
+        <td>{{ forloop.counter }}</td>
+        <td>{{ rikishi.shusshin.flag }}{{ rikishi.name }}</td>
+        <td>{{ rikishi.rank.short_name }}</td>
+        <td>{{ rikishi.glicko.rating |floatformat:0 }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  <footer>
+    <nav class="pagination">
+      {% if page_obj.has_previous %}
+      <a
+        href="{% url 'ranking' %}?page=1"
+        hx-get="{% url 'ranking' %}?page=1"
+        hx-trigger="click"
+        hx-target="#ranking-box"
+      >
+        «
+      </a>
+      <a
+        href="{% url 'ranking' %}?page={{ page_obj.previous_page_number }}"
+        hx-get="{% url 'ranking' %}?page={{ page_obj.previous_page_number }}"
+        hx-trigger="click"
+        hx-target="#ranking-box"
+      >
+        previous
+      </a>
+      {% endif %}
+
+      <span>{{ page_obj.number }} / {{ page_obj.paginator.num_pages }}</span>
+
+      {% if page_obj.has_next %}
+      <a
+        href="{% url 'ranking' %}?page={{ page_obj.next_page_number }}"
+        hx-get="{% url 'ranking' %}?page={{ page_obj.next_page_number }}"
+        hx-trigger="click"
+        hx-target="#ranking-box"
+      >
+        next
+      </a>
+      <a
+        href="{% url 'ranking' %}?page={{ page_obj.paginator.num_pages }}"
+        hx-get="{% url 'ranking' %}?page={{ page_obj.paginator.num_pages }}"
+        hx-trigger="click"
+        hx-target="#ranking-box"
+      >
+        »
+      </a>
+      {% endif %}
+    </nav>
+  </footer>
+</article>

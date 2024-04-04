@@ -1,0 +1,15 @@
+{% extends "base.html" %} {% block content %}
+<div class="grid">
+  <div hx-get="{% url 'ranking' %}" hx-trigger="load" id="ranking-box"></div>
+  <div>
+    <article>
+      <p>
+        Lorem, ipsum dolor sit amet consectetur adipisicing elit. Facilis,
+        itaque! Provident repellat optio temporibus quibusdam nostrum eligendi,
+        esse hic nisi, quas perferendis amet dolorem pariatur aperiam eum
+        molestias ad dolores?
+      </p>
+    </article>
+  </div>
+</div>
+{% endblock content %}

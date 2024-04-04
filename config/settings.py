@@ -18,8 +18,10 @@ if not IS_HEROKU_APP or os.environ.get("PILLAR") == "DEV":
 
 if IS_HEROKU_APP:
     ALLOWED_HOSTS = ["*"]
+    SECURE_SSL_REDIRECT = True
 else:
     ALLOWED_HOSTS = []
+    SECURE_SSL_REDIRECT = False
 
 INSTALLED_APPS = [
     "whitenoise.runserver_nostatic",

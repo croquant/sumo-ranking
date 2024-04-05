@@ -1,5 +1,5 @@
 <article>
-  <header class="pico-background-pink-600">Glicko Rating</header>
+  <header class="secondary">Glicko Rating</header>
   <table>
     <thead>
       <tr>
@@ -12,7 +12,7 @@
     <tbody>
       {% for rikishi in object_list %}
       <tr>
-        <td>{{ forloop.counter }}</td>
+        <td>{{ rikishi.position }}</td>
         <td>{{ rikishi.shusshin.flag }}{{ rikishi.name }}</td>
         <td>{{ rikishi.rank.short_name }}</td>
         <td>{{ rikishi.glicko.rating |floatformat:0 }}</td>
@@ -22,23 +22,25 @@
   </table>
   <footer>
     <nav class="pagination">
-      {% if page_obj.has_previous %}
       <a
         href="{% url 'ranking' %}?page=1"
         hx-get="{% url 'ranking' %}?page=1"
         hx-trigger="click"
         hx-target="#ranking-box"
       >
-        «
+        1
       </a>
+      {% if page_obj.has_previous %}
       <a
         href="{% url 'ranking' %}?page={{ page_obj.previous_page_number }}"
         hx-get="{% url 'ranking' %}?page={{ page_obj.previous_page_number }}"
         hx-trigger="click"
         hx-target="#ranking-box"
       >
-        previous
+        &laquo; Previous
       </a>
+      {% else %}
+      <a href="#"> &laquo; Previous </a>
       {% endif %}
 
       <span>{{ page_obj.number }} / {{ page_obj.paginator.num_pages }}</span>
@@ -50,17 +52,18 @@
         hx-trigger="click"
         hx-target="#ranking-box"
       >
-        next
+        Next &raquo;
       </a>
+      {% else %}
+      <a href="#"> Next &raquo; </a> {% endif %}
       <a
         href="{% url 'ranking' %}?page={{ page_obj.paginator.num_pages }}"
         hx-get="{% url 'ranking' %}?page={{ page_obj.paginator.num_pages }}"
         hx-trigger="click"
         hx-target="#ranking-box"
       >
-        »
+        {{ page_obj.paginator.num_pages }}
       </a>
-      {% endif %}
     </nav>
   </footer>
 </article>

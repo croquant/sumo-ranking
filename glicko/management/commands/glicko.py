@@ -11,16 +11,20 @@ from glicko.models import Glicko, GlickoHistory
 from rikishi.models import Rikishi
 
 
-def get_contestants(basho: Basho) -> set[str]:
+def get_contestants(basho: Basho) -> set[Rikishi]:
     return set(
-        Torikumi.objects.filter(basho=basho)
-        .values_list("east", flat=True)
-        .distinct()
-        .union(
-            Torikumi.objects.filter(basho=basho)
-            .values_list("west", flat=True)
+        [
+            t.east
+            for t in Torikumi.objects.filter(basho=basho)
+            .select_related("east", "east__glicko")
             .distinct()
-        )
+        ]
+        + [
+            t.west
+            for t in Torikumi.objects.filter(basho=basho)
+            .select_related("west", "west__glicko")
+            .distinct()
+        ]
     )
 
 
@@ -59,12 +63,20 @@ class Command(BaseCommand):
             print(f"Constestants: {len(contestants)}")
 
             glickos = []
-            for contestant in contestants:
-                bouts = Torikumi.objects.filter(basho=basho_id).filter(
-                    Q(east=contestant) | Q(west=contestant)
+            for rikishi in contestants:
+                bouts = (
+                    Torikumi.objects.select_related(
+                        "east",
+                        "east__glicko",
+                        "west",
+                        "west__glicko",
+                        "winner",
+                        "winner__glicko",
+                    )
+                    .filter(basho=basho_id)
+                    .filter(Q(east=rikishi) | Q(west=rikishi))
                 )
 
-                rikishi = Rikishi.objects.get(pk=contestant)
                 glicko_player = Player(
                     rating=rikishi.glicko.rating,
                     rd=rikishi.glicko.rd,
@@ -93,16 +105,18 @@ class Command(BaseCommand):
                 )
             GlickoHistory.objects.bulk_create(glickos)
 
-            active_rikishi = Rikishi.objects.filter(
-                Q(intai__isnull=True) | Q(intai__gte=basho_date)
-            ).filter(debut__lte=basho_date)
+            active_rikishi = (
+                Rikishi.objects.prefetch_related("glicko")
+                .filter(Q(intai__isnull=True) | Q(intai__gte=basho_date))
+                .filter(debut__lte=basho_date)
+            )
             print(f"Active: {len(active_rikishi)}")
 
             glickos_to_update = []
             for rikishi in active_rikishi:
                 glicko = rikishi.glicko
                 glicko_history = GlickoHistory.objects.filter(
-                    basho=basho, glicko=rikishi.glicko
+                    basho=basho, glicko=glicko
                 ).first()
                 if glicko_history:
                     glicko.rating = glicko_history.rating

@@ -181,7 +181,7 @@ class Player:
         for i in range(len(rating_list)):
             tempE = self._E(rating_list[i], RD_list[i])
             tempSum += math.pow(self._g(RD_list[i]), 2) * tempE * (1 - tempE)
-        return 1 / tempSum
+        return 1 / max(tempSum, 0.00001)
 
     def _E(self, p2rating, p2RD):
         """The Glicko E function.

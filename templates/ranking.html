@@ -1,6 +1,6 @@
-<article>
-  <header class="secondary">Glicko Rating</header>
-  <table>
+<div class="flex flex-col h-full p-4">
+  <h2 class="text-lg">Glicko Rating</h2>
+  <table class="table table-zebra table-xs">
     <thead>
       <tr>
         <th>#</th>
@@ -20,50 +20,58 @@
       {% endfor %}
     </tbody>
   </table>
-  <footer>
-    <nav class="pagination">
-      <a
-        href="{% url 'ranking' %}?page=1"
-        hx-get="{% url 'ranking' %}?page=1"
-        hx-trigger="click"
-        hx-target="#ranking-box"
-      >
-        1
-      </a>
+  <div class="mt-auto self-center">
+    <div class="join">
       {% if page_obj.has_previous %}
-      <a
-        href="{% url 'ranking' %}?page={{ page_obj.previous_page_number }}"
-        hx-get="{% url 'ranking' %}?page={{ page_obj.previous_page_number }}"
+      <button
+        class="join-item btn btn-xs btn-secondary"
+        hx-get="{% url 'ranking' %}?page={{page_obj.previous_page_number}}"
         hx-trigger="click"
         hx-target="#ranking-box"
       >
-        &laquo; Previous
-      </a>
+        &lt;
+      </button>
       {% else %}
-      <a href="#"> &laquo; Previous </a>
-      {% endif %}
-
-      <span>{{ page_obj.number }} / {{ page_obj.paginator.num_pages }}</span>
-
-      {% if page_obj.has_next %}
-      <a
-        href="{% url 'ranking' %}?page={{ page_obj.next_page_number }}"
+      <button class="join-item btn btn-xs btn-secondary" disabled="disabled">
+        &lt;
+      </button>
+      {% endif %} {% for page in paginator_range %} 
+      {% if page == page_obj.paginator.ELLIPSIS %}
+      <button class="join-item btn btn-xs" disabled="disabled">
+        {{ page }}
+      </button>
+      {% elif page == page_obj.number %}
+      <button
+        class="join-item btn btn-xs btn-active"
+        hx-get="{% url 'ranking' %}?page={{ page }}"
+        hx-trigger="click"
+        hx-target="#ranking-box"
+      >
+        {{ page }}
+      </button>
+      {% else %}
+      <button
+        class="join-item btn btn-xs"
+        hx-get="{% url 'ranking' %}?page={{ page }}"
+        hx-trigger="click"
+        hx-target="#ranking-box"
+      >
+        {{ page }}
+      </button>
+      {% endif %} {% endfor %} {% if page_obj.has_next %}
+      <button
+        class="join-item btn btn-xs btn-secondary"
         hx-get="{% url 'ranking' %}?page={{ page_obj.next_page_number }}"
         hx-trigger="click"
         hx-target="#ranking-box"
       >
-        Next &raquo;
-      </a>
+        &gt;
+      </button>
       {% else %}
-      <a href="#"> Next &raquo; </a> {% endif %}
-      <a
-        href="{% url 'ranking' %}?page={{ page_obj.paginator.num_pages }}"
-        hx-get="{% url 'ranking' %}?page={{ page_obj.paginator.num_pages }}"
-        hx-trigger="click"
-        hx-target="#ranking-box"
-      >
-        {{ page_obj.paginator.num_pages }}
-      </a>
-    </nav>
-  </footer>
-</article>
+      <button class="join-item btn btn-xs btn-secondary" disabled="disabled">
+        &gt;
+      </button>
+      {% endif %}
+    </div>
+  </div>
+</div>

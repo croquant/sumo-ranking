@@ -1,15 +1,30 @@
-{% extends "base.html" %} {% block content %}
-<div class="grid">
-  <div hx-get="{% url 'ranking' %}" hx-trigger="load" id="ranking-box"></div>
-  <div>
-    <article>
-      <p>
-        Lorem, ipsum dolor sit amet consectetur adipisicing elit. Facilis,
-        itaque! Provident repellat optio temporibus quibusdam nostrum eligendi,
-        esse hic nisi, quas perferendis amet dolorem pariatur aperiam eum
-        molestias ad dolores?
-      </p>
-    </article>
+{% extends "base.html" %} {% load static %} {% block content %}
+<div
+  class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4"
+>
+  <div class="card bg-base-100 shadow-xl">
+    <figure>
+      <img src="{% static 'logo.jpeg'%}" alt="Logo" />
+    </figure>
+    <div class="card-body">
+      <h2 class="card-title">Welcome</h2>
+      <p>If a dog chews shoes whose shoes does he choose?</p>
+      <div class="card-actions justify-end">
+        <button class="btn btn-primary">Buy Now</button>
+      </div>
+    </div>
   </div>
+  <div
+    class="card bg-base-100 shadow-xl"
+    hx-get="{% url 'ranking' %}"
+    hx-trigger="load"
+    id="ranking-box"
+  ></div>
+  <div
+    class="card col-span-2 bg-base-100 shadow-xl p-4"
+    hx-get="{% url 'chart' %}"
+    hx-trigger="load"
+    id="chart-box"
+  ></div>
 </div>
 {% endblock content %}

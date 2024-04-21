@@ -1,0 +1,67 @@
+<div>
+  <canvas id="myChart"></canvas>
+</div>
+
+<script>
+    const ctx = document.getElementById("myChart");
+
+    new Chart(ctx, {
+      "type": "line",
+      "data": {
+          "labels": {{ labels | safe }},  // Replace with actual dates
+          "datasets": [
+              {
+                  "label": "R1",
+                  "data": {{ data_1 | safe }},  // Replace with actual Elo ratings
+                  "borderColor": "rgb(75, 192, 192)",
+                  "backgroundColor": "rgba(75, 192, 192, 0.2)",
+                  "fill": true,
+              },
+              {
+                  "label": "R2",
+                  "data": {{ data_2 | safe }},  // Replace with actual Elo ratings
+                  "borderColor": "rgb(192, 192, 75)",
+                  "backgroundColor": "rgba(192, 192, 75, 0.2)",
+                  "fill": true,
+              }
+          ],
+      },
+      "options": {
+        plugins: {
+            title: {
+                display: true,
+                text: '{{ title }}'
+            }
+        },
+          "scales": {
+              "xAxes": [
+                  {
+                      "type": "time",
+                      "time": {
+                          "unit": "day",
+                          "displayFormats": {
+                              "day": "MMM D",
+                          },
+                      },
+                      "scaleLabel": {
+                          "display": true,
+                          "labelString": "Date",
+                      },
+                  }
+              ],
+              "yAxes": [
+                  {
+                      "scaleLabel": {
+                          "display": true,
+                          "labelString": "Glicko Rating",
+                      },
+                  }
+              ],
+          },
+          "legend": {
+              "display": true,
+          },
+      },
+  }
+  );
+</script>

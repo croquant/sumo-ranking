@@ -1,40 +1,89 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="emerald">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="color-scheme" content="light dark" />
     <link
+      href="https://cdn.jsdelivr.net/npm/daisyui@4.10.1/dist/full.min.css"
       rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css"
+      type="text/css"
     />
     <link
+      href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"
       rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.colors.min.css"
     />
+    <script src="https://cdn.tailwindcss.com"></script>
     <script
       src="https://unpkg.com/htmx.org@1.9.11"
       integrity="sha384-0gxUXCCR8yv9FM2b+U3FDbsKthCI66oH5IA9fHppQq9DDMHuMauqq1ZHBpJxQ0J0"
       crossorigin="anonymous"
     ></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <title>Sumo Ranking</title>
   </head>
-  <body>
-    <header class="container">
-      <nav>
-        <ul>
-          <li>
-            <a href="/"><h1>Sumo Ranking</h1></a>
-          </li>
-        </ul>
-        <ul>
-          <li><a href="#">About</a></li>
-          <li><a href="#">Services</a></li>
-          <li><a href="#">Products</a></li>
-        </ul>
-      </nav>
+  <body class="bg-base-200 min-h-screen">
+    <header class="bg-neutral text-neutral-content mb-4 shadow-xl">
+      <div class="navbar container mx-auto">
+        <div class="flex-1">
+          <a href="/" class="text-xl">Sumo Genius</a>
+        </div>
+        <div class="flex-none">
+          <ul class="menu menu-horizontal px-1">
+            <li class="hidden md:inline"><a href="/">Home</a></li>
+            <li class="hidden md:inline"><a>Predictions</a></li>
+            <li class="hidden md:inline"><a>About</a></li>
+            <li class="inline md:hidden">
+              <details>
+                <summary>Links</summary>
+                <ul class="p-2 bg-fuchsia-800 text-white rounded-t-none">
+                  <li><a>Link 1</a></li>
+                  <li><a>Link 2</a></li>
+                </ul>
+              </details>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="bg-info h-1"></div>
+      <div class="bg-error h-1"></div>
+      <div class="bg-warning h-1"></div>
+      <div class="bg-success h-1"></div>
     </header>
-    <main class="container">{% block content %}{% endblock %}</main>
-    <footer class="container">&copy; Maxime Desmet Vanden Stock 2024</footer>
+
+    <main class="container mx-auto">{% block content %}{% endblock %}</main>
+
+    <footer
+      class="footer items-center mt-4 p-4 bg-neutral text-neutral-content"
+    >
+      <aside class="items-center grid-flow-col">
+        <h2 class="text-3xl">
+          <i class="bx bxs-bowl-rice"></i>
+        </h2>
+        <p>
+          Developed & maintained by
+          <a class="link-primary" href="https://max1.me"
+            >Maxime Desmet Vanden Stock</a
+          >
+          - Data sourced from
+          <a class="link-secondary" href="https://sumo-api.com/">Sumo-API</a> &
+          <a class="link-secondary" href="https://sumodb.sumogames.de"
+            >SumoDB</a
+          >
+          - This is an independent project not affiliated with
+          <a class="link-accent" href="https://www.sumo.or.jp/"
+            >The Japan Sumo Association 日本相撲協会</a
+          >
+          .
+        </p>
+      </aside>
+      <nav
+        class="grid-flow-col gap-4 md:place-self-center md:justify-self-end text-3xl"
+      >
+        <a href="mailto:sumo@max1.me"><i class="bx bxs-envelope"></i></a>
+        <a href="https://github.com/Croquant/sumo-ranking"
+          ><i class="bx bxl-github"></i
+        ></a>
+      </nav>
+    </footer>
   </body>
 </html>

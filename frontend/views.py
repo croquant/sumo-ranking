@@ -49,7 +49,7 @@ def chart_view(request):
     rikishi = (
         Rikishi.objects.prefetch_related("glicko")
         .exclude(Q(rank=None) | Q(intai__isnull=False))
-        .order_by("glicko__rating")
+        .order_by("-glicko__rating")
     )
     rikishi_1 = rikishi[0]
     rikishi_2 = rikishi[1]

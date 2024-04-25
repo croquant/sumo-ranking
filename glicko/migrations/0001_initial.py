@@ -6,33 +6,65 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
     dependencies = [
-        ('banzuke', '0003_alter_basho_options_alter_torikumi_options'),
-        ('rikishi', '0001_initial'),
+        ("banzuke", "0003_alter_basho_options_alter_torikumi_options"),
+        ("rikishi", "0001_initial"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Glicko',
+            name="Glicko",
             fields=[
-                ('rikishi', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, primary_key=True, related_name='glicko', serialize=False, to='rikishi.rikishi')),
-                ('rating', models.FloatField(default=1500, editable=False)),
-                ('rd', models.FloatField(default=350, editable=False)),
-                ('vol', models.FloatField(default=0.2, editable=False)),
+                (
+                    "rikishi",
+                    models.OneToOneField(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        primary_key=True,
+                        related_name="glicko",
+                        serialize=False,
+                        to="rikishi.rikishi",
+                    ),
+                ),
+                ("rating", models.FloatField(default=1500, editable=False)),
+                ("rd", models.FloatField(default=350, editable=False)),
+                ("vol", models.FloatField(default=0.2, editable=False)),
             ],
         ),
         migrations.CreateModel(
-            name='GlickoHistory',
+            name="GlickoHistory",
             fields=[
-                ('id', models.CharField(default=ulid.ULID, editable=False, max_length=26, primary_key=True, serialize=False)),
-                ('rating', models.FloatField(default=1500, editable=False)),
-                ('rd', models.FloatField(default=350, editable=False)),
-                ('vol', models.FloatField(default=0.2, editable=False)),
-                ('basho', models.ForeignKey(editable=False, on_delete=django.db.models.deletion.CASCADE, related_name='glicko_history', to='banzuke.basho')),
-                ('glicko', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='history', to='glicko.glicko')),
+                (
+                    "id",
+                    models.CharField(
+                        default=ulid.ULID,
+                        editable=False,
+                        max_length=26,
+                        primary_key=True,
+                        serialize=False,
+                    ),
+                ),
+                ("rating", models.FloatField(default=1500, editable=False)),
+                ("rd", models.FloatField(default=350, editable=False)),
+                ("vol", models.FloatField(default=0.2, editable=False)),
+                (
+                    "basho",
+                    models.ForeignKey(
+                        editable=False,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="glicko_history",
+                        to="banzuke.basho",
+                    ),
+                ),
+                (
+                    "glicko",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="history",
+                        to="glicko.glicko",
+                    ),
+                ),
             ],
         ),
     ]

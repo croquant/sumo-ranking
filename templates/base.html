@@ -3,21 +3,10 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link
-      href="https://cdn.jsdelivr.net/npm/daisyui@4.10.1/dist/full.min.css"
-      rel="stylesheet"
-      type="text/css"
-    />
-    <link
-      href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"
-      rel="stylesheet"
-    />
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.10.1/dist/full.min.css" rel="stylesheet" type="text/css" />
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
     <script src="https://cdn.tailwindcss.com"></script>
-    <script
-      src="https://unpkg.com/htmx.org@1.9.11"
-      integrity="sha384-0gxUXCCR8yv9FM2b+U3FDbsKthCI66oH5IA9fHppQq9DDMHuMauqq1ZHBpJxQ0J0"
-      crossorigin="anonymous"
-    ></script>
+    <script src="https://unpkg.com/htmx.org@1.9.11" integrity="sha384-0gxUXCCR8yv9FM2b+U3FDbsKthCI66oH5IA9fHppQq9DDMHuMauqq1ZHBpJxQ0J0" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <title>Sumo Ranking</title>
   </head>
@@ -29,15 +18,25 @@
         </div>
         <div class="flex-none">
           <ul class="menu menu-horizontal px-1">
-            <li class="hidden md:inline"><a href="/">Home</a></li>
-            <li class="hidden md:inline"><a>Predictions</a></li>
-            <li class="hidden md:inline"><a>About</a></li>
+            <li class="hidden md:inline">
+              <a href="/">Home</a>
+            </li>
+            <li class="hidden md:inline">
+              <a>Predictions</a>
+            </li>
+            <li class="hidden md:inline">
+              <a>About</a>
+            </li>
             <li class="inline md:hidden">
               <details>
                 <summary>Links</summary>
                 <ul class="p-2 bg-fuchsia-800 text-white rounded-t-none">
-                  <li><a>Link 1</a></li>
-                  <li><a>Link 2</a></li>
+                  <li>
+                    <a>Link 1</a>
+                  </li>
+                  <li>
+                    <a>Link 2</a>
+                  </li>
                 </ul>
               </details>
             </li>
@@ -50,40 +49,31 @@
       <div class="bg-success h-1"></div>
     </header>
 
-    <main class="container mx-auto">{% block content %}{% endblock %}</main>
+    <main class="container mx-auto">
+      {% block content %}
 
-    <footer
-      class="footer items-center mt-4 p-4 bg-neutral text-neutral-content"
-    >
+      {% endblock %}
+    </main>
+
+    <footer class="footer items-center mt-4 p-4 bg-neutral text-neutral-content">
       <aside class="items-center grid-flow-col">
-        <h2 class="text-3xl">
-          <i class="bx bxs-bowl-rice"></i>
-        </h2>
+        <h2 class="text-3xl"><i class="bx bxs-bowl-rice"></i></h2>
         <p>
           Developed & maintained by
-          <a class="link-primary" href="https://max1.me"
-            >Maxime Desmet Vanden Stock</a
-          >
+          <a class="link-primary" href="https://max1.me">Maxime Desmet Vanden Stock</a>
           - Data sourced from
           <a class="link-secondary" href="https://sumo-api.com/">Sumo-API</a> &
-          <a class="link-secondary" href="https://sumodb.sumogames.de"
-            >SumoDB</a
-          >
+          <a class="link-secondary" href="https://sumodb.sumogames.de">SumoDB</a>
           - This is an independent project not affiliated with
-          <a class="link-accent" href="https://www.sumo.or.jp/"
-            >The Japan Sumo Association 日本相撲協会</a
-          >
+          <a class="link-accent" href="https://www.sumo.or.jp/">The Japan Sumo Association 日本相撲協会</a>
           .
         </p>
       </aside>
-      <nav
-        class="grid-flow-col gap-4 md:place-self-center md:justify-self-end text-3xl"
-      >
+      <nav class="grid-flow-col gap-4 md:place-self-center md:justify-self-end text-3xl">
         <a href="mailto:sumo@max1.me"><i class="bx bxs-envelope"></i></a>
-        <a href="https://github.com/Croquant/sumo-ranking"
-          ><i class="bx bxl-github"></i
-        ></a>
+        <a href="https://github.com/Croquant/sumo-ranking"><i class="bx bxl-github"></i></a>
       </nav>
     </footer>
+    <video class="isLoaded" loop="" playsinline="" preload="metadata" disablepictureinpicture="" src="blob:https://www.redgifs.com/f22bc3c5-0bcd-4e78-9976-5b956551d490"></video>
   </body>
 </html>

@@ -5,61 +5,85 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('banzuke', '0001_initial'),
-        ('rikishi', '0001_initial'),
+        ("banzuke", "0001_initial"),
+        ("rikishi", "0001_initial"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='basho',
-            name='end_date',
+            model_name="basho",
+            name="end_date",
             field=models.DateField(editable=False),
         ),
         migrations.AlterField(
-            model_name='basho',
-            name='month',
+            model_name="basho",
+            name="month",
             field=models.PositiveSmallIntegerField(editable=False),
         ),
         migrations.AlterField(
-            model_name='basho',
-            name='start_date',
+            model_name="basho",
+            name="start_date",
             field=models.DateField(editable=False),
         ),
         migrations.AlterField(
-            model_name='basho',
-            name='year',
+            model_name="basho",
+            name="year",
             field=models.PositiveSmallIntegerField(editable=False),
         ),
         migrations.AlterField(
-            model_name='torikumi',
-            name='basho',
-            field=models.ForeignKey(editable=False, on_delete=django.db.models.deletion.CASCADE, related_name='torikumi', to='banzuke.basho'),
+            model_name="torikumi",
+            name="basho",
+            field=models.ForeignKey(
+                editable=False,
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="torikumi",
+                to="banzuke.basho",
+            ),
         ),
         migrations.AlterField(
-            model_name='torikumi',
-            name='day',
+            model_name="torikumi",
+            name="day",
             field=models.PositiveSmallIntegerField(editable=False),
         ),
         migrations.AlterField(
-            model_name='torikumi',
-            name='division',
-            field=models.ForeignKey(editable=False, on_delete=django.db.models.deletion.CASCADE, related_name='torikumi', to='rikishi.division'),
+            model_name="torikumi",
+            name="division",
+            field=models.ForeignKey(
+                editable=False,
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="torikumi",
+                to="rikishi.division",
+            ),
         ),
         migrations.AlterField(
-            model_name='torikumi',
-            name='east',
-            field=models.ForeignKey(editable=False, on_delete=django.db.models.deletion.CASCADE, related_name='east', to='rikishi.rikishi'),
+            model_name="torikumi",
+            name="east",
+            field=models.ForeignKey(
+                editable=False,
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="east",
+                to="rikishi.rikishi",
+            ),
         ),
         migrations.AlterField(
-            model_name='torikumi',
-            name='west',
-            field=models.ForeignKey(editable=False, on_delete=django.db.models.deletion.CASCADE, related_name='west', to='rikishi.rikishi'),
+            model_name="torikumi",
+            name="west",
+            field=models.ForeignKey(
+                editable=False,
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="west",
+                to="rikishi.rikishi",
+            ),
         ),
         migrations.AlterField(
-            model_name='torikumi',
-            name='winner',
-            field=models.ForeignKey(editable=False, on_delete=django.db.models.deletion.CASCADE, related_name='win', to='rikishi.rikishi'),
+            model_name="torikumi",
+            name="winner",
+            field=models.ForeignKey(
+                editable=False,
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="win",
+                to="rikishi.rikishi",
+            ),
         ),
     ]

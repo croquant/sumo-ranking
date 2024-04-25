@@ -6,80 +6,207 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
-            name='Division',
+            name="Division",
             fields=[
-                ('slug', models.SlugField(editable=False, primary_key=True, serialize=False)),
-                ('name', models.CharField(choices=[('Makuuchi', 'Makuuchi'), ('Juryo', 'Juryo'), ('Makushita', 'Makushita'), ('Sandanme', 'Sandanme'), ('Jonidan', 'Jonidan'), ('Jonokuchi', 'Jonokuchi'), ('Banzuke-gai', 'Banzuke-gai')], editable=False, max_length=12)),
-                ('level', models.PositiveSmallIntegerField(editable=False)),
+                (
+                    "slug",
+                    models.SlugField(
+                        editable=False, primary_key=True, serialize=False
+                    ),
+                ),
+                (
+                    "name",
+                    models.CharField(
+                        choices=[
+                            ("Makuuchi", "Makuuchi"),
+                            ("Juryo", "Juryo"),
+                            ("Makushita", "Makushita"),
+                            ("Sandanme", "Sandanme"),
+                            ("Jonidan", "Jonidan"),
+                            ("Jonokuchi", "Jonokuchi"),
+                            ("Banzuke-gai", "Banzuke-gai"),
+                        ],
+                        editable=False,
+                        max_length=12,
+                    ),
+                ),
+                ("level", models.PositiveSmallIntegerField(editable=False)),
             ],
             options={
-                'ordering': ['level'],
+                "ordering": ["level"],
             },
         ),
         migrations.CreateModel(
-            name='Heya',
+            name="Heya",
             fields=[
-                ('slug', models.SlugField(editable=False, primary_key=True, serialize=False)),
-                ('name', models.CharField(editable=False, max_length=32)),
+                (
+                    "slug",
+                    models.SlugField(
+                        editable=False, primary_key=True, serialize=False
+                    ),
+                ),
+                ("name", models.CharField(editable=False, max_length=32)),
             ],
             options={
-                'verbose_name_plural': 'Heya',
-                'ordering': ['name'],
+                "verbose_name_plural": "Heya",
+                "ordering": ["name"],
             },
         ),
         migrations.CreateModel(
-            name='Shusshin',
+            name="Shusshin",
             fields=[
-                ('slug', models.SlugField(editable=False, primary_key=True, serialize=False)),
-                ('name', models.CharField(editable=False, max_length=32)),
-                ('international', models.BooleanField(default=False, editable=False)),
+                (
+                    "slug",
+                    models.SlugField(
+                        editable=False, primary_key=True, serialize=False
+                    ),
+                ),
+                ("name", models.CharField(editable=False, max_length=32)),
+                (
+                    "international",
+                    models.BooleanField(default=False, editable=False),
+                ),
             ],
             options={
-                'verbose_name_plural': 'Shusshin',
-                'ordering': ['international', 'name'],
+                "verbose_name_plural": "Shusshin",
+                "ordering": ["international", "name"],
             },
         ),
         migrations.CreateModel(
-            name='Rank',
+            name="Rank",
             fields=[
-                ('slug', models.SlugField(editable=False, primary_key=True, serialize=False)),
-                ('title', models.CharField(choices=[('Yokozuna', 'Yokozuna'), ('Ozeki', 'Ozeki'), ('Sekiwake', 'Sekiwake'), ('Komusubi', 'Komusubi'), ('Maegashira', 'Maegashira'), ('Juryo', 'Juryo'), ('Makushita', 'Makushita'), ('Sandanme', 'Sandanme'), ('Jonidan', 'Jonidan'), ('Jonokuchi', 'Jonokuchi'), ('Banzuke-gai', 'Banzuke-gai')], editable=False, max_length=12)),
-                ('level', models.PositiveSmallIntegerField(editable=False)),
-                ('order', models.PositiveSmallIntegerField(blank=True, default=0, editable=False)),
-                ('direction', models.CharField(blank=True, choices=[('East', 'East'), ('West', 'West')], editable=False, max_length=4)),
-                ('division', models.ForeignKey(editable=False, on_delete=django.db.models.deletion.CASCADE, related_name='ranks', to='rikishi.division')),
+                (
+                    "slug",
+                    models.SlugField(
+                        editable=False, primary_key=True, serialize=False
+                    ),
+                ),
+                (
+                    "title",
+                    models.CharField(
+                        choices=[
+                            ("Yokozuna", "Yokozuna"),
+                            ("Ozeki", "Ozeki"),
+                            ("Sekiwake", "Sekiwake"),
+                            ("Komusubi", "Komusubi"),
+                            ("Maegashira", "Maegashira"),
+                            ("Juryo", "Juryo"),
+                            ("Makushita", "Makushita"),
+                            ("Sandanme", "Sandanme"),
+                            ("Jonidan", "Jonidan"),
+                            ("Jonokuchi", "Jonokuchi"),
+                            ("Banzuke-gai", "Banzuke-gai"),
+                        ],
+                        editable=False,
+                        max_length=12,
+                    ),
+                ),
+                ("level", models.PositiveSmallIntegerField(editable=False)),
+                (
+                    "order",
+                    models.PositiveSmallIntegerField(
+                        blank=True, default=0, editable=False
+                    ),
+                ),
+                (
+                    "direction",
+                    models.CharField(
+                        blank=True,
+                        choices=[("East", "East"), ("West", "West")],
+                        editable=False,
+                        max_length=4,
+                    ),
+                ),
+                (
+                    "division",
+                    models.ForeignKey(
+                        editable=False,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="ranks",
+                        to="rikishi.division",
+                    ),
+                ),
             ],
             options={
-                'ordering': ['level', 'order', 'direction'],
+                "ordering": ["level", "order", "direction"],
             },
         ),
         migrations.CreateModel(
-            name='Rikishi',
+            name="Rikishi",
             fields=[
-                ('id', models.CharField(default=ulid.ULID, editable=False, max_length=26, primary_key=True, serialize=False)),
-                ('api_id', models.PositiveSmallIntegerField(editable=False, unique=True)),
-                ('name', models.CharField(max_length=64)),
-                ('name_jp', models.CharField(max_length=64)),
-                ('height', models.DecimalField(blank=True, decimal_places=1, max_digits=4, null=True)),
-                ('weight', models.DecimalField(blank=True, decimal_places=1, max_digits=4, null=True)),
-                ('birth_date', models.DateField(blank=True, null=True)),
-                ('debut', models.DateField(blank=True, null=True)),
-                ('intai', models.DateField(blank=True, null=True)),
-                ('heya', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='rikishi', to='rikishi.heya')),
-                ('rank', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='rikishi', to='rikishi.rank')),
-                ('shusshin', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='rikishi', to='rikishi.shusshin')),
+                (
+                    "id",
+                    models.CharField(
+                        default=ulid.ULID,
+                        editable=False,
+                        max_length=26,
+                        primary_key=True,
+                        serialize=False,
+                    ),
+                ),
+                (
+                    "api_id",
+                    models.PositiveSmallIntegerField(
+                        editable=False, unique=True
+                    ),
+                ),
+                ("name", models.CharField(max_length=64)),
+                ("name_jp", models.CharField(max_length=64)),
+                (
+                    "height",
+                    models.DecimalField(
+                        blank=True, decimal_places=1, max_digits=4, null=True
+                    ),
+                ),
+                (
+                    "weight",
+                    models.DecimalField(
+                        blank=True, decimal_places=1, max_digits=4, null=True
+                    ),
+                ),
+                ("birth_date", models.DateField(blank=True, null=True)),
+                ("debut", models.DateField(blank=True, null=True)),
+                ("intai", models.DateField(blank=True, null=True)),
+                (
+                    "heya",
+                    models.ForeignKey(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.SET_NULL,
+                        related_name="rikishi",
+                        to="rikishi.heya",
+                    ),
+                ),
+                (
+                    "rank",
+                    models.ForeignKey(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.SET_NULL,
+                        related_name="rikishi",
+                        to="rikishi.rank",
+                    ),
+                ),
+                (
+                    "shusshin",
+                    models.ForeignKey(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.SET_NULL,
+                        related_name="rikishi",
+                        to="rikishi.shusshin",
+                    ),
+                ),
             ],
             options={
-                'verbose_name_plural': 'Rikishi',
-                'ordering': ['name'],
+                "verbose_name_plural": "Rikishi",
+                "ordering": ["name"],
             },
         ),
     ]

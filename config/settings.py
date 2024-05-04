@@ -34,6 +34,7 @@ INSTALLED_APPS = [
     "rikishi",
     "banzuke",
     "glicko",
+    "prediction",
 ]
 
 MIDDLEWARE = [

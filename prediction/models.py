@@ -13,6 +13,7 @@ class Prediction(models.Model):
         Rikishi,
         on_delete=models.CASCADE,
         related_name="prediction",
+        editable=False,
         db_index=True,
     )
     basho = models.ForeignKey(

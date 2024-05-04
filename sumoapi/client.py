@@ -38,4 +38,4 @@ class SumoApiClient:
         basho_date = (datetime.now() + timedelta(days=5)).strftime("%Y%m")
         endpoint = f"/basho/{basho_date}/banzuke/Makuuchi"
         response = json.loads(requests.get(f"{BASE_URL}{endpoint}").text)
-        return response["east"] + response["west"]
+        return basho_date, response["east"] + response["west"]

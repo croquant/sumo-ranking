@@ -37,5 +37,9 @@ class SumoApiClient:
     def get_next_basho(self):
         basho_date = (datetime.now() + timedelta(days=5)).strftime("%Y%m")
         endpoint = f"/basho/{basho_date}/banzuke/Makuuchi"
-        response = json.loads(requests.get(f"{BASE_URL}{endpoint}").text)
+        try:
+            response = json.loads(requests.get(f"{BASE_URL}{endpoint}").text)
+        except requests.RequestException as e:
+            print(f"Failed to fetch data: {e}")
+            return None
         return basho_date, response["east"] + response["west"]

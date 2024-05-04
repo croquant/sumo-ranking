@@ -11,7 +11,7 @@ def home_view(request):
     return render(request, "home.html")
 
 
-class ranking_view(ListView):
+class RankingView(ListView):
     model = Rikishi
     paginate_by = 20
     template_name = "ranking.html"

@@ -36,25 +36,21 @@ from .constants import (
 
 
 class Player:
-    # Class attribute
-    # The system constant, which constrains
-    # the change in volatility over time.
-
-    def getRating(self):
+    def get_rating(self):
         return (self.__rating * GLICKO2_SCALER) + DEFAULT_RATING
 
-    def setRating(self, rating):
+    def set_rating(self, rating):
         self.__rating = (rating - DEFAULT_RATING) / GLICKO2_SCALER
 
-    rating = property(getRating, setRating)
+    rating = property(get_rating, set_rating)
 
-    def getRd(self):
+    def get_rd(self):
         return self.__rd * GLICKO2_SCALER
 
-    def setRd(self, rd):
+    def set_rd(self, rd):
         self.__rd = rd / GLICKO2_SCALER
 
-    rd = property(getRd, setRd)
+    rd = property(get_rd, set_rd)
 
     def __init__(
         self,
@@ -66,11 +62,11 @@ class Player:
         # For testing purposes, preload the values
         # assigned to an unrated player.
         self._tau = tau
-        self.setRating(rating)
-        self.setRd(rd)
+        self.set_rating(rating)
+        self.set_rd(rd)
         self.vol = vol
 
-    def _preRatingRD(self):
+    def _pre_rating_rd(self):
         """Calculates and updates the player's rating deviation for the
         beginning of a rating period.
 
@@ -79,7 +75,7 @@ class Player:
         """
         self.__rd = math.sqrt(math.pow(self.__rd, 2) + math.pow(self.vol, 2))
 
-    def update_player(self, rating_list, RD_list, outcome_list):
+    def update_player(self, rating_list, rd_list, outcome_list):
         """Calculates the new rating and rating deviation of the player.
 
         update_player(list[int], list[int], list[bool]) -> None
@@ -89,23 +85,23 @@ class Player:
         rating_list = [
             (x - DEFAULT_RATING) / GLICKO2_SCALER for x in rating_list
         ]
-        RD_list = [x / GLICKO2_SCALER for x in RD_list]
+        rd_list = [x / GLICKO2_SCALER for x in rd_list]
 
-        v = self._v(rating_list, RD_list)
-        self.vol = self._newVol(rating_list, RD_list, outcome_list, v)
-        self._preRatingRD()
+        v = self._v(rating_list, rd_list)
+        self.vol = self._new_vol(rating_list, rd_list, outcome_list, v)
+        self._pre_rating_rd()
 
         self.__rd = 1 / math.sqrt((1 / math.pow(self.__rd, 2)) + (1 / v))
 
-        tempSum = 0
+        temp_sum = 0
         for i in range(len(rating_list)):
-            tempSum += self._g(RD_list[i]) * (
-                outcome_list[i] - self._E(rating_list[i], RD_list[i])
+            temp_sum += self._g(rd_list[i]) * (
+                outcome_list[i] - self._e(rating_list[i], rd_list[i])
             )
-        self.__rating += math.pow(self.__rd, 2) * tempSum
+        self.__rating += math.pow(self.__rd, 2) * temp_sum
 
     # step 5
-    def _newVol(self, rating_list, RD_list, outcome_list, v):
+    def _new_vol(self, rating_list, rd_list, outcome_list, v):
         """Calculating the new volatility as per the Glicko2 system.
 
         Updated for Feb 22, 2012 revision. -Leo
@@ -116,41 +112,41 @@ class Player:
         # step 1
         a = math.log(self.vol**2)
         eps = CONVERGENCE_TOLERANCE
-        A = a
+        _a = a
 
         # step 2
-        B = None
-        delta = self._delta(rating_list, RD_list, outcome_list, v)
+        b = None
+        delta = self._delta(rating_list, rd_list, outcome_list, v)
         tau = self._tau
         if (delta**2) > ((self.__rd**2) + v):
-            B = math.log(delta**2 - self.__rd**2 - v)
+            b = math.log(delta**2 - self.__rd**2 - v)
         else:
             k = 1
             while self._f(a - k * math.sqrt(tau**2), delta, v, a) < 0:
                 k = k + 1
-            B = a - k * math.sqrt(tau**2)
+            b = a - k * math.sqrt(tau**2)
 
         # step 3
-        fA = self._f(A, delta, v, a)
-        fB = self._f(B, delta, v, a)
+        f_a = self._f(_a, delta, v, a)
+        f_b = self._f(b, delta, v, a)
 
         # step 4
-        while math.fabs(B - A) > eps:
+        while math.fabs(b - _a) > eps:
             # a
-            C = A + ((A - B) * fA) / (fB - fA)
-            fC = self._f(C, delta, v, a)
+            c = _a + ((_a - b) * f_a) / (f_b - f_a)
+            f_c = self._f(c, delta, v, a)
             # b
-            if fC * fB <= 0:
-                A = B
-                fA = fB
+            if f_c * f_b <= 0:
+                _a = b
+                f_a = f_b
             else:
-                fA = fA / 2.0
+                f_a = f_a / 2.0
             # c
-            B = C
-            fB = fC
+            b = c
+            f_b = f_c
 
         # step 5
-        return math.exp(A / 2)
+        return math.exp(_a / 2)
 
     def _f(self, x, delta, v, a):
         ex = math.exp(x)
@@ -158,48 +154,50 @@ class Player:
         denom1 = 2 * ((self.__rating**2 + v + ex) ** 2)
         return (num1 / denom1) - ((x - a) / (self._tau**2))
 
-    def _delta(self, rating_list, RD_list, outcome_list, v):
+    def _delta(self, rating_list, rd_list, outcome_list, v):
         """The delta function of the Glicko2 system.
 
         _delta(list, list, list) -> float
 
         """
-        tempSum = 0
+        temp_sum = 0
         for i in range(len(rating_list)):
-            tempSum += self._g(RD_list[i]) * (
-                outcome_list[i] - self._E(rating_list[i], RD_list[i])
+            temp_sum += self._g(rd_list[i]) * (
+                outcome_list[i] - self._e(rating_list[i], rd_list[i])
             )
-        return v * tempSum
+        return v * temp_sum
 
-    def _v(self, rating_list, RD_list):
+    def _v(self, rating_list, rd_list):
         """The v function of the Glicko2 system.
 
         _v(list[int], list[int]) -> float
 
         """
-        tempSum = 0
+        temp_sum = 0
         for i in range(len(rating_list)):
-            tempE = self._E(rating_list[i], RD_list[i])
-            tempSum += math.pow(self._g(RD_list[i]), 2) * tempE * (1 - tempE)
-        return 1 / max(tempSum, 0.00001)
+            temp_e = self._e(rating_list[i], rd_list[i])
+            temp_sum += (
+                math.pow(self._g(rd_list[i]), 2) * temp_e * (1 - temp_e)
+            )
+        return 1 / max(temp_sum, 0.00001)
 
-    def _E(self, p2rating, p2RD):
+    def _e(self, p2rating, p2rd):
         """The Glicko E function.
 
         _E(int) -> float
 
         """
         return 1 / (
-            1 + math.exp(-1 * self._g(p2RD) * (self.__rating - p2rating))
+            1 + math.exp(-1 * self._g(p2rd) * (self.__rating - p2rating))
         )
 
-    def _g(self, RD):
+    def _g(self, rd):
         """The Glicko2 g(RD) function.
 
         _g() -> float
 
         """
-        return 1 / math.sqrt(1 + 3 * math.pow(RD, 2) / math.pow(math.pi, 2))
+        return 1 / math.sqrt(1 + 3 * math.pow(rd, 2) / math.pow(math.pi, 2))
 
     def did_not_compete(self):
         """Applies Step 6 of the algorithm. Use this for
@@ -208,4 +206,4 @@ class Player:
         did_not_compete() -> None
 
         """
-        self._preRatingRD()
+        self._pre_rating_rd()

@@ -36,7 +36,7 @@ def get_basho_record(
         score = 1 if bout.winner == rikishi else 0
         opponent = bout.west if bout.east == rikishi else bout.east
         records.append((opponent.glicko.rating, opponent.glicko.rd, score))
-    return tuple(map(list, zip(*records)))
+    return tuple(map(list, zip(*records, strict=False)))
 
 
 class Command(BaseCommand):
@@ -90,7 +90,7 @@ class Command(BaseCommand):
                     )
                     glicko_player.update_player(
                         rating_list=rating_list,
-                        RD_list=rd_list,
+                        rd_list=rd_list,
                         outcome_list=score_list,
                     )
 
@@ -98,8 +98,8 @@ class Command(BaseCommand):
                     GlickoHistory(
                         glicko=rikishi.glicko,
                         basho=basho,
-                        rating=max(glicko_player.getRating(), 1),
-                        rd=glicko_player.getRd(),
+                        rating=max(glicko_player.get_rating(), 1),
+                        rd=glicko_player.get_rd(),
                         vol=glicko_player.vol,
                     )
                 )
@@ -129,8 +129,8 @@ class Command(BaseCommand):
                         vol=glicko.vol,
                     )
                     glicko_player.did_not_compete()
-                    glicko.rating = glicko_player.getRating()
-                    glicko.rd = glicko_player.getRd()
+                    glicko.rating = glicko_player.get_rating()
+                    glicko.rd = glicko_player.get_rd()
                     glicko.vol = glicko_player.vol
                 glickos_to_update.append(glicko)
 

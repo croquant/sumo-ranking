@@ -3,3 +3,13 @@ requires-python = ">=3.10"
 
 [tool.ruff]
 line-length = 79
+
+[tool.ruff.lint]
+select = [
+    "E",  # pycodestyle
+    "F",  # Pyflakes
+    "B",  # flake8-bugbear
+    "SIM",  # flake8-simplify
+    "I",  # isort
+    "N",
+]

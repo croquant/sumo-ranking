@@ -95,7 +95,9 @@ class Command(BaseCommand):
             pred.n_wins = r["wins"]
             pred.save()
             print(
-                f"{r['r'].rank.__str__()  : <15} \t{r['r'].name : <12} \t{r['wins']:.1f}"
+                f"""{r['r'].rank.__str__()  : <15} \t
+                    {r['r'].name : <12} \t
+                    {r['wins']:.1f}"""
             )
 
         t1 = time.perf_counter()

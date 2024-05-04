@@ -43,33 +43,29 @@ class Command(BaseCommand):
                     rank = Rank.objects.get_or_create(title=rank_parts[0])[0]
                 rikishi.rank = rank
 
-            if "heya" in r:
-                if r["heya"] != "-":
-                    heya = Heya.objects.get_or_create(name=r["heya"])[0]
-                    rikishi.heya = heya
+            if "heya" in r and r["heya"] != "-":
+                heya = Heya.objects.get_or_create(name=r["heya"])[0]
+                rikishi.heya = heya
 
-            if "shusshin" in r:
-                if r["shusshin"] != "-":
-                    search = (
-                        r["shusshin"]
-                        .split(",")[0]
-                        .split("-")[0]
-                        .split("(")[0]
-                        .replace(".", "")
-                        .replace("Western Samoa", "Samoa")
-                        .replace("British Commonwealth", "United Kingdom")
-                    )
-                    country = pycountry.countries.search_fuzzy(search)[0]
-                    shusshin = None
-                    if country.name == "Japan":
-                        shusshin = Shusshin.objects.get_or_create(name=search)[
-                            0
-                        ]
-                    else:
-                        shusshin = Shusshin.objects.get_or_create(
-                            name=country.common_name, international=True
-                        )[0]
-                    rikishi.shusshin = shusshin
+            if "shusshin" in r and r["shusshin"] != "-":
+                search = (
+                    r["shusshin"]
+                    .split(",")[0]
+                    .split("-")[0]
+                    .split("(")[0]
+                    .replace(".", "")
+                    .replace("Western Samoa", "Samoa")
+                    .replace("British Commonwealth", "United Kingdom")
+                )
+                country = pycountry.countries.search_fuzzy(search)[0]
+                shusshin = None
+                if country.name == "Japan":
+                    shusshin = Shusshin.objects.get_or_create(name=search)[0]
+                else:
+                    shusshin = Shusshin.objects.get_or_create(
+                        name=country.common_name, international=True
+                    )[0]
+                rikishi.shusshin = shusshin
 
             if "nskId" in r:
                 rikishi.nsk_id = r["nskId"]

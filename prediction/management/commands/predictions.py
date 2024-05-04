@@ -3,9 +3,12 @@ import itertools
 import math
 import random
 import time
+from datetime import datetime
 
 from django.core.management.base import BaseCommand
 
+from banzuke.models import Basho
+from prediction.models import Prediction
 from rikishi.models import Rikishi
 from sumoapi.client import SumoApiClient
 
@@ -31,7 +34,14 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         t0 = time.perf_counter()
 
-        rik_list = sumoapi.get_next_basho()
+        basho_date, rik_list = sumoapi.get_next_basho()
+        basho = Basho.objects.get_or_create(
+            slug=basho_date,
+            year=basho_date[0:4],
+            month=basho_date[-2:],
+            start_date=datetime.now(),
+            end_date=datetime.now(),
+        )[0]
         id_list = [r["rikishiID"] for r in rik_list]
         rikishis = (
             Rikishi.objects.prefetch_related("glicko")
@@ -79,6 +89,11 @@ class Command(BaseCommand):
         ]
 
         for r in ranking:
+            pred = Prediction.objects.get_or_create(
+                rikishi=r["r"], basho=basho
+            )[0]
+            pred.n_wins = r["wins"]
+            pred.save()
             print(
                 f"{r['r'].rank.__str__()  : <15} \t{r['r'].name : <12} \t{r['wins']:.1f}"
             )

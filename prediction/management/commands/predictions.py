@@ -54,7 +54,7 @@ class Command(BaseCommand):
                 local_records[match[1].name]["total"] += 1
             return local_records
 
-        monte_carlo = 1000
+        monte_carlo = 10000
         with concurrent.futures.ThreadPoolExecutor() as executor:
             futures = [
                 executor.submit(simulate_matchups) for _ in range(monte_carlo)

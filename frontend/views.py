@@ -42,14 +42,12 @@ class RankingView(ListView):
 
 def chart_view(request):
     data_1 = []
-    labels_1 = []
     data_2 = []
-    labels_2 = []
 
     rikishi = (
         Rikishi.objects.prefetch_related("glicko")
         .exclude(Q(rank=None) | Q(intai__isnull=False))
-        .order_by("-glicko__rating")
+        .order_by("?")
     )
     rikishi_1 = rikishi[0]
     rikishi_2 = rikishi[1]
@@ -65,21 +63,44 @@ def chart_view(request):
         .order_by("basho")
     )
 
+    all_dates = set()
     for basho_glicko in history_1:
-        data_1.append(basho_glicko.rating)
-        labels_1.append(basho_glicko.basho.end_date.isoformat())
-
+        all_dates.add(basho_glicko.basho.end_date.isoformat())
     for basho_glicko in history_2:
-        data_2.append(basho_glicko.rating)
-        labels_2.append(basho_glicko.basho.end_date.isoformat())
+        all_dates.add(basho_glicko.basho.end_date.isoformat())
+
+    vd1 = 0
+    vd2 = 0
+    for date in sorted(all_dates):
+        vd1 = next(
+            (
+                bg.rating
+                for bg in history_1
+                if bg.basho.end_date.isoformat() == date
+            ),
+            vd1,
+        )
+        data_1.append(vd1)
+
+        vd2 = next(
+            (
+                bg.rating
+                for bg in history_2
+                if bg.basho.end_date.isoformat() == date
+            ),
+            vd2,
+        )
+        data_2.append(vd2)
 
     return render(
         request,
         "charts/base.html",
         {
             "title": f"{rikishi_1.name} vs {rikishi_2.name}",
+            "name_1": rikishi_1.name,
             "data_1": data_1,
+            "name_2": rikishi_2.name,
             "data_2": data_2,
-            "labels": sorted(set(labels_1 + labels_2)),
+            "labels": sorted(all_dates),
         },
     )

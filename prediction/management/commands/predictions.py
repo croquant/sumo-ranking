@@ -66,7 +66,9 @@ class Command(BaseCommand):
                     records[name]["total"] += data["total"]
 
         for _, record in records.items():
-            record["win_percent"] = record["wins"] / record["total"]
+            record["win_percent"] = (
+                record["wins"] / record["total"] if record["total"] > 0 else 0
+            )
             record["predicted_wins"] = record["win_percent"] * 15
 
         records = sorted(
@@ -75,7 +77,11 @@ class Command(BaseCommand):
 
         for _, record in records:
             print(
-                f"{record['obj'].rank.__str__()  : <12} \t{record['obj'].name : <12} \t{record['predicted_wins']:.2f} ({record['win_percent'] * 100:.2f}%) {record['wins']}/{record['total']}"  # noqa: E501
+                f"{record['obj'].rank.__str__()  : <12} \t"
+                + f"{record['obj'].name : <12} \t"
+                + f"{record['predicted_wins']:.2f} \t"
+                + f"({record['win_percent'] * 100:.2f}%) \t"
+                + f"{record['wins']}/{record['total']}"
             )
             pred = Prediction.objects.get_or_create(
                 rikishi=record["obj"], basho=basho

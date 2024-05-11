@@ -9,8 +9,8 @@ class Basho(models.Model):
     slug = models.CharField(max_length=6, primary_key=True, editable=False)
     year = models.PositiveSmallIntegerField(editable=False)
     month = models.PositiveSmallIntegerField(editable=False)
-    start_date = models.DateField(editable=False)
-    end_date = models.DateField(editable=False)
+    start_date = models.DateField(editable=False, blank=True, null=True)
+    end_date = models.DateField(editable=False, blank=True, null=True)
 
     def name(self):
         return BASHO_NAMES[self.month]

@@ -1,33 +1,17 @@
 import concurrent.futures
 import itertools
-import math
 import random
 import time
-from datetime import datetime
 
 from django.core.management.base import BaseCommand
 
 from banzuke.models import Basho
 from prediction.models import Prediction
+from prediction.utils import get_precomputed_probs
 from rikishi.models import Rikishi
 from sumoapi.client import SumoApiClient
 
 sumoapi = SumoApiClient()
-
-
-def get_precomputed_rikishi(rikishi):
-    transformed_rating = (rikishi.glicko.rating - 1500) / 173.7178
-    transformed_rd = rikishi.glicko.rd / 173.7178
-    return transformed_rating, transformed_rd
-
-
-def win_prob(precomputed_r1, precomputed_r2):
-    rating_1, rd_1 = precomputed_r1
-    rating_2, rd_2 = precomputed_r2
-
-    return 1 / (
-        1 + math.exp(-1 * math.sqrt(rd_1**2 + rd_2**2) * (rating_1 - rating_2))
-    )
 
 
 class Command(BaseCommand):
@@ -39,35 +23,38 @@ class Command(BaseCommand):
             slug=basho_date,
             year=basho_date[0:4],
             month=basho_date[-2:],
-            start_date=datetime.now(),
-            end_date=datetime.now(),
         )[0]
         id_list = [r["rikishiID"] for r in rik_list]
         rikishis = (
-            Rikishi.objects.prefetch_related("glicko")
+            Rikishi.objects.select_related("heya")
+            .prefetch_related("glicko")
             .filter(api_id__in=id_list)
-            .order_by("-glicko__rating")
         )
 
         records = dict()
-        precomputed_r = dict()
         for r in rikishis:
-            records[r.name] = {"wins": 0, "obj": r}
-            precomputed_r[r.name] = get_precomputed_rikishi(r)
+            records[r.name] = {"wins": 0, "total": 0, "obj": r}
+
+        precomputed_probs = get_precomputed_probs(rikishis)
 
         matchups = list(itertools.combinations(rikishis, 2))
 
         def simulate_matchups():
-            local_records = {r.name: {"wins": 0, "obj": r} for r in rikishis}
+            local_records = {
+                r.name: {"wins": 0, "total": 0, "obj": r} for r in rikishis
+            }
             for match in matchups:
-                p1 = win_prob(
-                    precomputed_r[match[0].name], precomputed_r[match[1].name]
-                )
+                if match[0].heya == match[1].heya:
+                    continue
+
+                p1 = precomputed_probs[match[0].name][match[1].name]
                 winner = random.choices(match, [p1, 1 - p1])
                 local_records[winner[0].name]["wins"] += 1
+                local_records[match[0].name]["total"] += 1
+                local_records[match[1].name]["total"] += 1
             return local_records
 
-        monte_carlo = 10000
+        monte_carlo = 1000
         with concurrent.futures.ThreadPoolExecutor() as executor:
             futures = [
                 executor.submit(simulate_matchups) for _ in range(monte_carlo)
@@ -76,29 +63,25 @@ class Command(BaseCommand):
                 results = future.result()
                 for name, data in results.items():
                     records[name]["wins"] += data["wins"]
+                    records[name]["total"] += data["total"]
 
-        ranking = dict(
-            sorted(records.items(), key=lambda item: -item[1]["wins"])
+        for _, record in records.items():
+            record["win_percent"] = record["wins"] / record["total"]
+            record["predicted_wins"] = record["win_percent"] * 15
+
+        records = sorted(
+            records.items(), key=lambda x: x[1]["win_percent"], reverse=True
         )
-        ranking = [
-            {
-                "r": v["obj"],
-                "wins": v["wins"] / monte_carlo / 41 * 15,
-            }
-            for k, v in ranking.items()
-        ]
 
-        for r in ranking:
-            pred = Prediction.objects.get_or_create(
-                rikishi=r["r"], basho=basho
-            )[0]
-            pred.n_wins = r["wins"]
-            pred.save()
+        for _, record in records:
             print(
-                f"""{r['r'].rank.__str__()  : <15} \t
-                    {r['r'].name : <12} \t
-                    {r['wins']:.1f}"""
+                f"{record['obj'].rank.__str__()  : <12} \t{record['obj'].name : <12} \t{record['predicted_wins']:.2f} ({record['win_percent'] * 100:.2f}%) {record['wins']}/{record['total']}"  # noqa: E501
             )
+            pred = Prediction.objects.get_or_create(
+                rikishi=record["obj"], basho=basho
+            )[0]
+            pred.n_wins = record["predicted_wins"]
+            pred.save()
 
         t1 = time.perf_counter()
         print(f"Total Time: {t1 - t0}s")

@@ -166,7 +166,7 @@ def chart_view(request):
 
     return render(
         request,
-        "charts/base.html",
+        "charts/top4_history.html",
         {
             "name_1": rikishi_1.name,
             "data_1": data_1,

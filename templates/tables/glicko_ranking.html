@@ -4,8 +4,8 @@
     <thead>
       <tr>
         <th>#</th>
-        <th>Name</th>
         <th>Rank</th>
+        <th>Name</th>
         <th>Rating</th>
       </tr>
     </thead>
@@ -13,8 +13,8 @@
       {% for rikishi in object_list %}
         <tr>
           <td>{{ rikishi.position }}</td>
-          <td>{{ rikishi.shusshin.flag }}{{ rikishi.name }}</td>
           <td>{{ rikishi.rank.short_name }}</td>
+          <td>{{ rikishi.shusshin.flag }}{{ rikishi.name }}</td>
           <td>{{ rikishi.glicko.rating|floatformat:0 }}</td>
         </tr>
       {% endfor %}

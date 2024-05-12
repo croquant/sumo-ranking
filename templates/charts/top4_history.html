@@ -1,5 +1,5 @@
-<div>
-  <h2 class="text-lg">Comparison Chart</h2>
+<div class="card bg-base-100 shadow-xl p-4">
+  <h2 class="text-lg text-center">Top 4 Rating History</h2>
   <canvas id="myChart"></canvas>
 </div>
 
@@ -9,31 +9,35 @@
     new Chart(ctx, {
       "type": "line",
       "data": {
-          "labels": {{ labels | safe }},  // Replace with actual dates
+          "labels": {{ labels | safe }},
           "datasets": [
               {
                   "label": "{{ name_1 }}",
-                  "data": {{ data_1 | safe }},  // Replace with actual Elo ratings
-                  "borderColor": "rgba(255, 190, 0)",
-                  "backgroundColor": "rgba(255, 190, 0, 0.2)",
-                  "fill": true,
+                  "data": {{ data_1 | safe }},
+                  "borderColor": "rgb(0, 181, 255)",
+                  "spanGaps": true,
               },
               {
                   "label": "{{ name_2 }}",
-                  "data": {{ data_2 | safe }},  // Replace with actual Elo ratings
-                  "borderColor": "rgba(0, 169, 110)",
-                  "backgroundColor": "rgba(0, 169, 110, 0.2)",
-                  "fill": true,
-              }
+                  "data": {{ data_2 | safe }},
+                  "borderColor": "rgb(255, 88, 97)",
+                  "spanGaps": true,
+              },
+              {
+                "label": "{{ name_3 }}",
+                "data": {{ data_3 | safe }},
+                "borderColor": "rgba(255, 190, 0)",
+                "spanGaps": true,
+            },
+            {
+                "label": "{{ name_4 }}",
+                "data": {{ data_4 | safe }},
+                "borderColor": "rgba(0, 169, 110)",
+                "spanGaps": true,
+            }
           ],
       },
       "options": {
-        plugins: {
-            title: {
-                display: true,
-                text: '{{ title }}'
-            }
-        },
           "scales": {
               "xAxes": [
                   {
@@ -54,7 +58,7 @@
                   {
                       "scaleLabel": {
                           "display": true,
-                          "labelString": "Glicko Rating",
+                          "labelString": "Power Rating",
                       },
                   }
               ],

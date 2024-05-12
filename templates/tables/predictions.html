@@ -1,0 +1,23 @@
+<div class="flex flex-col h-full p-4">
+  <h2 class="text-lg">Predicted wins for {{ basho }}</h2>
+  <table class="table table-zebra table-xs">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Rank</th>
+        <th>Name</th>
+        <th>Wins</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for prediction in object_list %}
+        <tr>
+          <td>{{ prediction.position }}</td>
+          <td>{{ prediction.rikishi.rank.short_name }}</td>
+          <td>{{ prediction.rikishi.shusshin.flag }}{{ prediction.rikishi.name }}</td>
+          <td>{{ prediction.n_wins|floatformat:2 }}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>

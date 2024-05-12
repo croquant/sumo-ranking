@@ -1,0 +1,44 @@
+<div class="flex flex-col h-full p-4">
+  <h2 class="text-lg">Power Ranking</h2>
+  <table class="table table-zebra table-xs">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Name</th>
+        <th>Rank</th>
+        <th>Rating</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for rikishi in object_list %}
+        <tr>
+          <td>{{ rikishi.position }}</td>
+          <td>{{ rikishi.shusshin.flag }}{{ rikishi.name }}</td>
+          <td>{{ rikishi.rank.short_name }}</td>
+          <td>{{ rikishi.glicko.rating|floatformat:0 }}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  <div class="mt-auto self-center">
+    <div class="join">
+      {% if page_obj.has_previous %}
+        <button class="join-item btn btn-xs btn-secondary" hx-get="{% url 'ranking' %}?page={{ page_obj.previous_page_number }}" hx-trigger="click" hx-target="#ranking-box">&lt;</button>
+      {% else %}
+        <button class="join-item btn btn-xs btn-secondary" disabled="disabled">&lt;</button>
+      {% endif %} {% for page in paginator_range %}
+        {% if page == page_obj.paginator.ELLIPSIS %}
+          <button class="join-item btn btn-xs" disabled="disabled">{{ page }}</button>
+        {% elif page == page_obj.number %}
+          <button class="join-item btn btn-xs btn-active" hx-get="{% url 'ranking' %}?page={{ page }}" hx-trigger="click" hx-target="#ranking-box">{{ page }}</button>
+        {% else %}
+          <button class="join-item btn btn-xs" hx-get="{% url 'ranking' %}?page={{ page }}" hx-trigger="click" hx-target="#ranking-box">{{ page }}</button>
+        {% endif %}
+      {% endfor %} {% if page_obj.has_next %}
+        <button class="join-item btn btn-xs btn-secondary" hx-get="{% url 'ranking' %}?page={{ page_obj.next_page_number }}" hx-trigger="click" hx-target="#ranking-box">&gt;</button>
+      {% else %}
+        <button class="join-item btn btn-xs btn-secondary" disabled="disabled">&gt;</button>
+      {% endif %}
+    </div>
+  </div>
+</div>

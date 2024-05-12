@@ -4,6 +4,7 @@ from django.shortcuts import render
 from django.views.generic.list import ListView
 
 from glicko.models import GlickoHistory
+from prediction.models import Prediction
 from rikishi.models import Rikishi
 
 
@@ -11,10 +12,10 @@ def home_view(request):
     return render(request, "home.html")
 
 
-class RankingView(ListView):
+class GlickoRankingView(ListView):
     model = Rikishi
-    paginate_by = 20
-    template_name = "ranking.html"
+    paginate_by = 42
+    template_name = "tables/glicko_ranking.html"
 
     def get_queryset(self, *args, **kwargs):
         qs = (
@@ -37,6 +38,37 @@ class RankingView(ListView):
             page.number, on_each_side=1, on_ends=2
         )
         context["paginator_range"] = paginator_range
+        return context
+
+
+class PredictionView(ListView):
+    model = Prediction
+    template_name = "tables/predictions.html"
+
+    def get_queryset(self, *args, **kwargs):
+        last_pred = Prediction.objects.select_related("basho").latest(
+            "basho__year", "basho__month"
+        )
+        qs = (
+            Prediction.objects.select_related(
+                "rikishi", "rikishi__rank", "rikishi__shusshin"
+            )
+            .filter(basho=last_pred.basho)
+            .order_by("-n_wins")
+            .annotate(
+                position=Window(
+                    expression=RowNumber(), order_by=F("n_wins").desc()
+                )
+            )
+        )
+        return qs
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        last_pred = Prediction.objects.select_related("basho").latest(
+            "basho__year", "basho__month"
+        )
+        context["basho"] = last_pred.basho
         return context
 
 

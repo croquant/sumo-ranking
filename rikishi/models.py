@@ -141,7 +141,6 @@ class Rikishi(models.Model):
         blank=True,
         null=True,
         related_name="rikishi",
-        db_index=True,
     )
     heya = models.ForeignKey(
         Heya,

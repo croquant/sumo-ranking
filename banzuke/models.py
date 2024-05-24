@@ -1,5 +1,5 @@
 from django.db import models
-from ulid import ULID
+from django.utils.text import slugify
 
 from banzuke.constants import BASHO_NAMES
 from rikishi.models import Division, Rikishi
@@ -23,22 +23,18 @@ class Basho(models.Model):
 
 
 class Torikumi(models.Model):
-    id = models.CharField(
-        primary_key=True, max_length=26, default=ULID, editable=False
-    )
+    slug = models.CharField(primary_key=True, max_length=32, editable=False)
     basho = models.ForeignKey(
         Basho,
         on_delete=models.CASCADE,
         related_name="torikumi",
         editable=False,
-        db_index=True,
     )
     division = models.ForeignKey(
         Division,
         on_delete=models.CASCADE,
         related_name="torikumi",
         editable=False,
-        db_index=True,
     )
     day = models.PositiveSmallIntegerField(editable=False)
     east = models.ForeignKey(
@@ -50,6 +46,15 @@ class Torikumi(models.Model):
     winner = models.ForeignKey(
         Rikishi, on_delete=models.CASCADE, related_name="win", editable=False
     )
+
+    def save(self, *args, **kwargs):
+        self.slug = self.gen_slug()
+        super(Torikumi, self).save(*args, **kwargs)
+
+    def gen_slug(self):
+        return slugify(
+            f"{self.basho.slug}-{self.division.level}-{self.day}-{self.east.api_id}-{self.west.api_id}"
+        )
 
     class Meta:
         verbose_name_plural = "Torikumi"

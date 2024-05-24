@@ -5,7 +5,8 @@ DIVISION_LEVELS = [
     ("Sandanme", 4),
     ("Jonidan", 5),
     ("Jonokuchi", 6),
-    ("Banzuke-gai", 7),
+    ("Mae-zumo", 7),
+    ("Banzuke-gai", 8),
 ]
 
 DIVISION_NAMES = [
@@ -15,6 +16,7 @@ DIVISION_NAMES = [
     ("Sandanme", "Sandanme"),
     ("Jonidan", "Jonidan"),
     ("Jonokuchi", "Jonokuchi"),
+    ("Mae-zumo", "Mae-zumo"),
     ("Banzuke-gai", "Banzuke-gai"),
 ]
 
@@ -25,6 +27,7 @@ DIVISION_NAMES_SHORT = {
     "Sandanme": "Sd",
     "Jonidan": "Jd",
     "Jonokuchi": "Jk",
+    "Mae-zumo": "Mz",
     "Banzuke-gai": "Bg",
 }
 
@@ -39,6 +42,7 @@ RANK_NAMES = [
     ("Sandanme", "Sandanme"),
     ("Jonidan", "Jonidan"),
     ("Jonokuchi", "Jonokuchi"),
+    ("Mae-zumo", "Mae-zumo"),
     ("Banzuke-gai", "Banzuke-gai"),
 ]
 
@@ -53,6 +57,7 @@ RANK_NAMES_SHORT = {
     "Sandanme": "Sd",
     "Jonidan": "Jd",
     "Jonokuchi": "Jk",
+    "Mae-zumo": "Mz",
     "Banzuke-gai": "Bg",
 }
 
@@ -67,7 +72,8 @@ RANKING_LEVELS = {
     "Sandanme": 8,
     "Jonidan": 9,
     "Jonokuchi": 10,
-    "Banzuke-gai": 11,
+    "Mae-": 11,
+    "Banzuke-gai": 12,
 }
 
 DIRECTION_NAMES = [("East", "East"), ("West", "West")]

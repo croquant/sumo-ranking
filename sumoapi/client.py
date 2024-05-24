@@ -25,12 +25,27 @@ class SumoApiClient:
         else:
             return None
 
+    def get_basho_by_id(self, id):
+        endpoint = f"/basho/{id}"
+        response = json.loads(requests.get(f"{BASE_URL}{endpoint}").text)
+        if "date" in response and response["date"] != "":
+            return response
+        else:
+            return None
+
     def get_bouts(self, year, month, day, division="Makuuchi"):
         endpoint = f"/basho/{year}{month:02d}/torikumi/{division}/{day}"
-        print(f"{BASE_URL}{endpoint}")
         response = json.loads(requests.get(f"{BASE_URL}{endpoint}").text)
         if response and "torikumi" in response:
             return response["torikumi"]
+        else:
+            return None
+
+    def get_bouts_for_rikishi(self, api_id):
+        endpoint = f"/rikishi/{api_id}/matches"
+        response = json.loads(requests.get(f"{BASE_URL}{endpoint}").text)
+        if response and "records" in response and response["total"] > 0:
+            return response["records"]
         else:
             return None
 

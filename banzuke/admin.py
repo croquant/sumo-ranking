@@ -18,9 +18,17 @@ class BashoAdmin(admin.ModelAdmin):
 
 @admin.register(Torikumi)
 class TorikumiAdmin(admin.ModelAdmin):
-    list_display = ("id", "basho", "division", "day", "east", "west", "winner")
+    list_display = (
+        "slug",
+        "basho",
+        "division",
+        "day",
+        "east",
+        "west",
+        "winner",
+    )
     readonly_fields = (
-        "id",
+        "slug",
         "basho",
         "division",
         "day",

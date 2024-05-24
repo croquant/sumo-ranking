@@ -55,8 +55,12 @@ def get_weighted_prob(
     head_to_head_prob: float,
     head_to_head_weight: float,
 ) -> float:
-    if not (0 <= glicko_win_prob <= 1) or not (0 <= head_to_head_prob <= 1):
-        raise ValueError("Probabilities must be between 0 and 1")
+    if (
+        not (0 <= glicko_win_prob <= 1)
+        or not (0 <= head_to_head_prob <= 1)
+        or not (0 <= head_to_head_weight <= 1)
+    ):
+        raise ValueError("probabilities/weights must be between 0 and 1")
 
     glicko_weight = 1 - head_to_head_weight
 

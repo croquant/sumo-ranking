@@ -12,7 +12,6 @@ class Glicko(models.Model):
         primary_key=True,
         on_delete=models.CASCADE,
         related_name="glicko",
-        db_index=True,
     )
     rating = models.FloatField(default=DEFAULT_RATING, editable=False)
     rd = models.FloatField(default=DEFAULT_RD, editable=False)
@@ -30,14 +29,12 @@ class GlickoHistory(models.Model):
         Glicko,
         on_delete=models.CASCADE,
         related_name="history",
-        db_index=True,
     )
     basho = models.ForeignKey(
         Basho,
         on_delete=models.CASCADE,
         related_name="glicko_history",
         editable=False,
-        db_index=True,
     )
     rating = models.FloatField(default=DEFAULT_RATING, editable=False)
     rd = models.FloatField(default=DEFAULT_RD, editable=False)

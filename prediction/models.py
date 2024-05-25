@@ -14,13 +14,11 @@ class Prediction(models.Model):
         on_delete=models.CASCADE,
         related_name="prediction",
         editable=False,
-        db_index=True,
     )
     basho = models.ForeignKey(
         Basho,
         on_delete=models.CASCADE,
         related_name="prediction",
         editable=False,
-        db_index=True,
     )
     n_wins = models.FloatField(default=0.0, editable=False)

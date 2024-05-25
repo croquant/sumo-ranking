@@ -20,16 +20,18 @@ def save_bouts(bouts, basho):
             winner = Rikishi.objects.get(api_id=bout["winnerId"])
         except Exception:
             continue
-        torikumi.append(
-            Torikumi(
-                basho=basho,
-                division=division,
-                day=bout["day"],
-                east=east,
-                west=west,
-                winner=winner,
-            )
+
+        new_torikumi = Torikumi(
+            basho=basho,
+            division=division,
+            day=bout["day"],
+            east=east,
+            west=west,
+            winner=winner,
         )
+        new_torikumi.slug = new_torikumi.gen_slug()
+        print(bout, new_torikumi.slug)
+        torikumi.append(new_torikumi)
 
     Torikumi.objects.bulk_create(torikumi)
 

@@ -22,7 +22,7 @@ class Command(BaseCommand):
     ):
         t0 = time.perf_counter()
 
-        all_rikishi = Rikishi.objects.all()
+        all_rikishi = Rikishi.objects.all().only("id", "api_id")
         total = len(all_rikishi)
 
         divisions = Division.objects.in_bulk(field_name="slug")
@@ -51,14 +51,14 @@ class Command(BaseCommand):
                     print("! === Failed to process bout", bout)
                     continue
 
-                _torikumi = Torikumi.objects.get_or_create(
+                Torikumi.objects.get_or_create(
                     basho=basho,
                     division=division,
                     day=bout["day"],
                     east=east,
                     west=west,
                     winner=winner,
-                )[0]
+                )
 
         t1 = time.perf_counter()
         print(f"Total Time: {t1 - t0}s")
@@ -77,10 +77,12 @@ class Command(BaseCommand):
             end_date = datetime.strptime(
                 basho_response["endDate"], "%Y-%m-%dT%H:%M:%SZ"
             )
-            return Basho.objects.create(
+            basho = Basho.objects.create(
                 slug=basho_response["date"],
                 year=int(basho_response["date"][0:4]),
                 month=int(basho_response["date"][-2:]),
                 start_date=start_date,
                 end_date=end_date,
             )
+            existing_basho[bout["bashoId"]] = basho
+            return basho

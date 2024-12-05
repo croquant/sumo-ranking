@@ -13,7 +13,11 @@ class BashoAdmin(admin.ModelAdmin):
         "start_date",
         "end_date",
     )
-    readonly_fields = ("slug", "year", "month", "start_date", "end_date")
+    readonly_fields = (
+        "slug",
+        "year",
+        "month",
+    )
 
 
 @admin.register(Torikumi)

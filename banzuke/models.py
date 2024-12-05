@@ -2,15 +2,15 @@ from django.db import models
 from django.utils.text import slugify
 
 from banzuke.constants import BASHO_NAMES
-from rikishi.models import Division, Rikishi
+from rikishi.models import Division, Rank, Rikishi
 
 
 class Basho(models.Model):
     slug = models.CharField(max_length=6, primary_key=True, editable=False)
     year = models.PositiveSmallIntegerField(editable=False)
     month = models.PositiveSmallIntegerField(editable=False)
-    start_date = models.DateField(editable=False, blank=True, null=True)
-    end_date = models.DateField(editable=False, blank=True, null=True)
+    start_date = models.DateField(blank=True, null=True)
+    end_date = models.DateField(blank=True, null=True)
 
     def name(self):
         return BASHO_NAMES[self.month]
@@ -40,8 +40,26 @@ class Torikumi(models.Model):
     east = models.ForeignKey(
         Rikishi, on_delete=models.CASCADE, related_name="east", editable=False
     )
+    east_rank = models.ForeignKey(
+        Rank,
+        on_delete=models.CASCADE,
+        editable=False,
+        related_name="east_rank",
+        blank=True,
+        null=True,
+        default=None,
+    )
     west = models.ForeignKey(
         Rikishi, on_delete=models.CASCADE, related_name="west", editable=False
+    )
+    west_rank = models.ForeignKey(
+        Rank,
+        on_delete=models.CASCADE,
+        editable=False,
+        related_name="west_rank",
+        blank=True,
+        null=True,
+        default=None,
     )
     winner = models.ForeignKey(
         Rikishi, on_delete=models.CASCADE, related_name="win", editable=False

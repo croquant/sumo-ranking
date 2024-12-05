@@ -8,9 +8,16 @@ BASE_URL = "https://sumo-api.com/api"
 
 class SumoApiClient:
     def get_all_rikishi(self):
-        endpoint = "/rikishis?intai=true"
-        response = requests.get(f"{BASE_URL}{endpoint}")
-        return json.loads(response.text)["records"]
+        all_rikishi = []
+        skip = 0
+        records = []
+        while records is not None:
+            all_rikishi.extend(records)
+            endpoint = f"/rikishis?intai=true&limit=1000&skip={skip * 1000}"
+            response = requests.get(f"{BASE_URL}{endpoint}")
+            records = json.loads(response.text)["records"]
+            skip += 1
+        return all_rikishi
 
     def get_rikishi(self, id):
         endpoint = f"/rikishi/{id}"
@@ -58,3 +65,14 @@ class SumoApiClient:
             print(f"Failed to fetch data: {e}")
             return None
         return basho_date, response["east"] + response["west"]
+
+
+class AsyncSumoApiClient:
+    async def fetch(self, session, url):
+        async with session.get(url) as response:
+            return await response.text()
+
+    async def get_bouts_for_rikishi(self, session, api_id):
+        endpoint = f"{BASE_URL}/rikishi/{api_id}/matches"
+        response_text = await self.fetch(session, endpoint)
+        return json.loads(response_text)

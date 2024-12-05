@@ -49,7 +49,11 @@ class Rank(models.Model):
         blank=True, default=0, editable=False
     )
     direction = models.CharField(
-        max_length=4, choices=DIRECTION_NAMES, blank=True, editable=False
+        max_length=4,
+        choices=DIRECTION_NAMES,
+        blank=True,
+        null=True,
+        editable=False,
     )
 
     def name(self):
@@ -132,7 +136,9 @@ class Rikishi(models.Model):
     id = models.CharField(
         primary_key=True, max_length=26, default=ULID, editable=False
     )
-    api_id = models.PositiveSmallIntegerField(unique=True, editable=False)
+    api_id = models.PositiveSmallIntegerField(
+        unique=True, editable=False, db_index=True
+    )
     name = models.CharField(max_length=64)
     name_jp = models.CharField(max_length=64)
     rank = models.ForeignKey(

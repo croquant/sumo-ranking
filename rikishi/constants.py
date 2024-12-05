@@ -72,7 +72,7 @@ RANKING_LEVELS = {
     "Sandanme": 8,
     "Jonidan": 9,
     "Jonokuchi": 10,
-    "Mae-": 11,
+    "Mae-zumo": 11,
     "Banzuke-gai": 12,
 }
 

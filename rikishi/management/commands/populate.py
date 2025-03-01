@@ -67,12 +67,9 @@ class Command(BaseCommand):
                     )[0]
                 rikishi.shusshin = shusshin
 
-            if "nskId" in r:
-                rikishi.nsk_id = r["nskId"]
-
-            if "sumodbId" in r:
-                rikishi.nsk_id = r["sumodbId"]
-
+            if "shikonaEn" not in r:
+                print(f"Skipping {r['id']}")
+                continue
             rikishi.name = r["shikonaEn"]
 
             if "shikonaJp" in r:

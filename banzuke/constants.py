@@ -8,7 +8,7 @@ DIVISIONS = [
 ]
 
 BASHO_NAMES = {
-    1: "Hastu",
+    1: "Hatsu",
     3: "Haru",
     5: "Natsu",
     7: "Nagoya",

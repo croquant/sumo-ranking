@@ -10,12 +10,23 @@ class SumoApiClient:
     def get_all_rikishi(self):
         all_rikishi = []
         skip = 0
-        records = []
-        while records is not None:
-            all_rikishi.extend(records)
+        records = None
+        while True:
             endpoint = f"/rikishis?intai=true&limit=1000&skip={skip * 1000}"
-            response = requests.get(f"{BASE_URL}{endpoint}")
-            records = json.loads(response.text)["records"]
+            try:
+                response = requests.get(f"{BASE_URL}{endpoint}")
+                response.raise_for_status()
+                records = json.loads(response.text)["records"]
+            except (
+                requests.RequestException,
+                json.JSONDecodeError,
+                KeyError,
+            ) as e:
+                print(f"Failed to fetch rikishi records: {e}")
+                break
+            if not records:
+                break
+            all_rikishi.extend(records)
             skip += 1
         return all_rikishi
 

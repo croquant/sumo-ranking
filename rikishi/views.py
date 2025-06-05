@@ -35,7 +35,7 @@ class CustomPagination(PaginationBase):
         page = pagination.page
         max_per_page = pagination.max_per_page
         total_items = queryset.count()
-        total_page = math.floor(total_items / max_per_page)
+        total_page = max(math.ceil(total_items / max_per_page) - 1, 0)
         next_page = min(page + 1, total_page)
         previous_page = max(page - 1, 0)
         return {

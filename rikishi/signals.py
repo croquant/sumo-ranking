@@ -7,6 +7,7 @@ from .models import Rikishi
 
 
 @receiver(post_save, sender=Rikishi)
-def create_elo_for_image(sender, instance, created, **kwargs):
+def create_glicko_for_rikishi(sender, instance, created, **kwargs):
+    """Create a Glicko rating for each new Rikishi."""
     if created:
         Glicko.objects.create(rikishi=instance)
